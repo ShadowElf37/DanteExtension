@@ -17,11 +17,11 @@ class Packet:
 		self.l4 = UDPHeader(self.payload, multicast_port)
 
 	def ip_len_recalc(self):
-        t = 0
-        for h in [h for h in [self.l2, self.l3, self.l4] if h is not None]:
-            t += len(h.compile())
-        t += len(self.datagram)
-        self.l3.header[2] = t
+		t = 0
+		for h in [h for h in [self.l2, self.l3, self.l4] if h is not None]:
+			t += len(h.compile())
+		t += len(self.payload)
+		self.l3.header[2] = t
 
 class Client:
 	def __init__(self, fqdn, interface='eth0'):
