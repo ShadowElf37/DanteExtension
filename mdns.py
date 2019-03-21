@@ -9,9 +9,15 @@ def multiord(s):
 	return num
 
 class Query:
+	TYPES = {
+		'A': 1,
+		'PTR': 12,
+		'TXT': 16,
+			 }
+
 	def __init__(self, name, type, unicast=0, cls=1):
 		self.name = name
-		self.type = type
+		self.type = Query.TYPES.get(type, 16)
 		self.unicast = unicast
 		self.cls = cls
 

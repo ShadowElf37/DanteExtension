@@ -7,7 +7,7 @@ multicast_ip = '224.0.0.251'
 multicast_port = '5353'
 multicast_mac = '01:00:5E:00:00:FB'
 src_ip = gethostbyname(gethostname())
-src_mac = get_mac()
+src_mac = ':'.join([hex(get_mac())[2:][i*2:(i+1)*2] for i in range(len(hex(get_mac())[2:])//2)])
 
 class Packet:
 	def __init__(self, payload=''):
@@ -32,11 +32,11 @@ class Client:
 		self.socket.bind((interface, 0))
 		# self.socket.connect((multicast_ip, multicast_port))
 
-	def construct_query(self, name, type):
-		return mdns.Query(name, type)
+	def construct_query(self, destname, type, contents=''):
+		return mdns.Query(destname, type)
 
-	def construct_packet(self, name, type):
-		return Packet(mdns.Query(name, type).compile())
+	def construct_packet(self, destname, type, contents=''):
+		return Packet(mdns.Query(destname, type).compile())
 
 	def send(self, packet):
 		self.socket.send(packet.compile())
