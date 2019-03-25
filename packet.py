@@ -3,6 +3,7 @@ from struct import pack
 from random import randint
 from data import *
 
+
 class MACHeader:
     def __init__(self, src_mac, dst_mac, ethertype=0x0800):
         # Ethertype 0x0800 is IPv4
@@ -14,6 +15,7 @@ class MACHeader:
 
     def compile(self):
         return pack('!BBBBBBBBBBBBH', *self.header)
+
 
 class IPHeader:
     def __init__(self, source, dest, header_length=5, ttl=255, protocol=socket.IPPROTO_TCP):
@@ -58,6 +60,21 @@ class IPHeader:
         self.header[-3] = b
 
         return pack('!BBHHHBBH4s4s', *self.header)
+
+
+class IGMPHeader:
+    def __init__(self, type, addr=0):
+        self.header = [
+            type,
+            0, # max_response_time
+            addr, # 0 for general and leave (all hosts)
+            0 # checksum
+        ]
+        self.type = type
+        self.max_response_time = 0
+        self.addr = addr
+        self.checksum = 0
+
 
 class UDPHeader:
     def __init__(self, payload, dport, sport=0):
